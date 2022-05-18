@@ -25,7 +25,6 @@ const LoadSpinner = props => {
   const spinners = useRef(Array.from({ length: spinnerNo }))
 
   /* 
-  * onMounted 
   * function to run when component mounted
   * to set styles and start animations
   */
@@ -48,7 +47,7 @@ const LoadSpinner = props => {
     }, 0)
    
     // set continuous in-out cycle
-    setInterval(() => {
+    return setInterval(() => {
       maxWidth = maxWidth == 0 ? containerWidth / 2 : 0
       movePoints(maxWidth)
     }, (intervalSeconds+1) * 1000)
@@ -93,7 +92,10 @@ const LoadSpinner = props => {
 
   // useEffect hook set with empty array to run when component first mounted
   useEffect(() => {
-    onMounted()
+    const LoadSpinnerInterval = onMounted()
+    return function cleanup() {
+        clearInterval(LoadSpinnerInterval);
+    }
   },[]
   )
 
@@ -102,7 +104,7 @@ const LoadSpinner = props => {
     ReactDOM.createPortal(
     <>
       <div className={Style.spinnerScreen}>
-        <div ref={spinnerContainer}>
+        <div className="spinner" ref={spinnerContainer}>
           <div>
             {Array.from({ length: spinnerNo }, (item, index) => (
               // set refs depending on the index value of the div
